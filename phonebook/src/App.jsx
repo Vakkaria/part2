@@ -1,15 +1,17 @@
 import {useState, useEffect} from 'react'
-import DisplayPersons from "./components/DisplayPersons.jsx"
-import FilterForm from "./components/FilterForm.jsx"
-import AddForm from "./components/AddForm.jsx"
+import DisplayPersons from './components/DisplayPersons.jsx'
+import FilterForm from './components/FilterForm.jsx'
+import AddForm from './components/AddForm.jsx'
 import personsServices from './services/persons.js'
-import axios from "axios";
+import Notification from './components/Notification.jsx'
 
 const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newPhone, setNewPhone] = useState('')
     const [findings, setFindings] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         personsServices
@@ -24,6 +26,11 @@ const App = () => {
             personsServices
                 .deleteData(id)
                 .then(() => setPersons(persons.filter(p => p.id !== id)))
+                .catch(() => {
+                    setError(true)
+                    setErrorMessage(`Information of ${name} has already been removed from server`)
+                    setTimeout(() => setErrorMessage(null), 2000)
+                })
         }
     }
 
@@ -58,8 +65,11 @@ const App = () => {
             .create(personObject)
             .then(newValue => {
                 setPersons(persons.concat(newValue))
+                setError(false)
+                setErrorMessage(`Added ${newName}`)
                 setNewPhone('')
                 setNewName('')
+                setTimeout(() => setErrorMessage(null), 2000)
             })
     }
 
@@ -70,6 +80,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={errorMessage} error={error}/>
             <FilterForm findings={findings} handleFindingChange={handleFindingChange}/>
             <h3>add a new</h3>
             <AddForm addPerson={addPerson} newPhone={newPhone} newName={newName}

@@ -1,9 +1,11 @@
 import Person from './Person.jsx'
 
-const DisplayPersons = ({person, findings}) => {
+const DisplayPersons = ({person, findings, deletePerson}) => {
     if (person.name.toLowerCase().includes(findings.toLowerCase())) {
         return (
-            <Person name={person.name} phone={person.phone}/>
+            <div>
+                <Person person={person} deletePerson={deletePerson}/>
+            </div>
         )
     }
 }

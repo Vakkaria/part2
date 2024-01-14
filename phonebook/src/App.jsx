@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import DisplayPersons from "./components/DisplayPersons.jsx"
 import FilterForm from "./components/FilterForm.jsx"
 import AddForm from "./components/AddForm.jsx"
-import Axios from 'axios'
+import personsServices from './services/persons.js'
 import axios from "axios";
 
 const App = () => {
@@ -12,31 +12,55 @@ const App = () => {
     const [findings, setFindings] = useState('')
 
     useEffect(() => {
-        console.log('effect')
-        axios.get('http://localhost:3001/persons').then(response =>{
-            console.log('promise fulfilled')
-            setPersons(response.data)
-        })
+        personsServices
+            .getAll()
+            .then(initialResult => setPersons(initialResult))
     }, [])
-    console.log('render', persons.length, 'persons')
+
+    const deletePerson = (event, name, id) => {
+        event.preventDefault()
+
+        if (confirm(`Delete ${name}`)) {
+            personsServices
+                .deleteData(id)
+                .then(() => setPersons(persons.filter(p => p.id !== id)))
+        }
+    }
 
     const addPerson = event => {
         event.preventDefault()
 
         if (persons.map(person => person.name).includes(newName)) {
-            alert(`${newName} is already added to phonebook`)
+
+            const name = persons.find(p => p.name === newName)
+            const changedPerson = {...name, phone: newPhone}
+
+            if (confirm(`${name} is already added to phonebook, replace the old number with a new one?`)) {
+                personsServices
+                    .update(name.id, changedPerson)
+                    .then(returnedData => {
+                        setPersons(persons.map(p => p.id !== name.id ? p : returnedData))
+                    })
+            }
+
+            setNewPhone('')
+            setNewName('')
+
             return
         }
 
-        const nameObject = {
+        const personObject = {
             name: newName,
-            phone: newPhone,
-            id: persons.length + 1
+            phone: newPhone
         }
 
-        setPersons(persons.concat(nameObject))
-        setNewName('')
-        setNewPhone('')
+        personsServices
+            .create(personObject)
+            .then(newValue => {
+                setPersons(persons.concat(newValue))
+                setNewPhone('')
+                setNewName('')
+            })
     }
 
     const handleNameChange = event => setNewName(event.target.value)
@@ -53,7 +77,7 @@ const App = () => {
             <h3>Numbers</h3>
             {persons.map(person =>
                 <DisplayPersons findings={findings} person={person}
-                                key={person.id}/>
+                                key={person.id} deletePerson={deletePerson}/>
             )}
         </div>
     )

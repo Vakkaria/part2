@@ -1,4 +1,4 @@
-const DisplayFindingForm = ({ newCountry, handleNewCountry }) => {
+const DisplayFindingForm = ({newCountry, handleNewCountry}) => {
     return (
         <form>
             find countries:

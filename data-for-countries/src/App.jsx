@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import countriesServices from './services/countries.js'
 import DisplayBody from './components/DisplayBody.jsx'
 import DisplayFindingForm from './components/DisplayFindingForm.jsx'
@@ -23,8 +23,8 @@ const App = () => {
     return (
         <div>
             <DisplayFindingForm newCountry={newCountry}
-                         handleNewCountry={handleNewCountry} />
-            <DisplayBody outputData={outputData} />
+                                handleNewCountry={handleNewCountry}/>
+            <DisplayBody outputData={outputData}/>
         </div>
     )
 }

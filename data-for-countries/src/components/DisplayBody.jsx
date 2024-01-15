@@ -1,7 +1,7 @@
 import DisplayCountry from './DisplayCountry.jsx'
 import DisplayCountries from './DisplayCountries.jsx'
 
-const DisplayBody = ({ outputData }) => {
+const DisplayBody = ({outputData}) => {
     return (
         <div>
             {outputData.length === 1
@@ -14,8 +14,7 @@ const DisplayBody = ({ outputData }) => {
                 ) : outputData.length <= 10 ? (
                     <div>
                         {outputData.map(country => (
-                            <DisplayCountries country={country.name.official}
-                                              key={country.cca3}/>
+                            <DisplayCountries country={country} key={country.cca3}/>
                         ))}
                     </div>
                 ) : (

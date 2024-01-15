@@ -3,7 +3,7 @@ import DisplayCountries from './DisplayCountries.jsx'
 
 const DisplayBody = ({outputData}) => {
     return (
-        <div>
+        <>
             {outputData.length === 1
                 ? (
                     <div>
@@ -20,7 +20,7 @@ const DisplayBody = ({outputData}) => {
                 ) : (
                     <p>Too many matches</p>
                 )}
-        </div>
+        </>
     )
 }
 

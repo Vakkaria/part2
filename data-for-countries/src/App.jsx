@@ -21,11 +21,11 @@ const App = () => {
     }
 
     return (
-        <div>
+        <>
             <DisplayFindingForm newCountry={newCountry}
                                 handleNewCountry={handleNewCountry}/>
             <DisplayBody outputData={outputData}/>
-        </div>
+        </>
     )
 }
 
